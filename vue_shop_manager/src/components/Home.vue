@@ -2,18 +2,22 @@
 <template>
   <el-container class="home-container">
     <!-- 头部 -->
-    <el-header>Header</el-header>
+    <el-header>电商后台管理</el-header>
 
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isCollapse? '64px': '200px'">
         <el-menu
           background-color="#373d41"
           text-color="#fff"
           active-text-color="#ffd04b"
           router
           :default-active="activeP"
+          unique-opened
+          :collapse="isCollapse"
+          :collapse-transition="false"
         >
+          <div class="collapse" @click="isCollapseF" v-text="toggleInner"></div>
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单模板区域 -->
@@ -23,6 +27,7 @@
               <!-- 一级菜单文本 -->
               <span>{{item.authName}}</span>
             </template>
+
             <!-- 二级菜单 -->
             <el-menu-item
               :index="'/' + subItem.path"
@@ -38,6 +43,7 @@
       <el-main>
         <router-view></router-view>
       </el-main>
+
     </el-container>
   </el-container>
 </template>
@@ -54,7 +60,9 @@ export default {
         '102': 'iconfont icon-danju',
         '145': 'iconfont icon-baobiao'
       },
-      activeP: ''
+      activeP: '',
+      isCollapse: false,
+      toggleInner: '(*^▽^*)'
     }
   },
   methods: {
@@ -72,24 +80,29 @@ export default {
       console.log(key, keyPath)
     },
 
+    isCollapseF() {
+      this.toggleInner = !this.isCollapse ? '(-▽-)' : '(*^▽^*)'
+      this.isCollapse = !this.isCollapse
+    },
+
     async getMenulist() {
       //发送请求获取菜单列表
       const { data: res } = await this.$http.get('menus')
       //判断一下获取列表是否成功
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      console.log(res.data)
       this.menuList = res.data
     },
 
     saveNavState(active) {
+      // 设置当前点击的项的颜色
+      this.activeP = active
       // 将当前点击的导航路径保存到本地缓存
       sessionStorage.setItem('activePath', active)
     }
   },
   created() {
-    this.activeP = sessionStorage.getItem("activePath")
-    console.log(this.activeP);
-    
+    this.activeP = sessionStorage.getItem('activePath')
+    console.log(this.activeP)
   }
 }
 </script>
@@ -121,6 +134,16 @@ export default {
 .el-aside {
   background-color: #333744;
   float: left;
+
+  .collapse {
+    width: 100%;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+  }
+
   .el-menu {
     border-right: none;
   }

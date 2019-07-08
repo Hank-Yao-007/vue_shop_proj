@@ -7,13 +7,14 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
+
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search" ></el-button>
+            <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -21,11 +22,53 @@
         </el-col>
       </el-row>
     </el-card>
+
+    <el-table :data="userlist" stripe border>
+      <el-table-column label="姓名" prop="username"></el-table-column>
+      <el-table-column label="邮箱" prop="email"></el-table-column>
+      <el-table-column label="手机" prop="mobile"></el-table-column>
+      <el-table-column label="角色" prop="role_name"></el-table-column>
+      <el-table-column label="状态" prop="mg_state">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.mg_state"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作"></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      queryInfo: {
+        query: '',
+        pagenum: 1,
+        pagesize: 2
+      },
+      userlist: [],
+      total: 0
+    }
+  },
+
+  created() {
+    this.getUserList()
+  },
+
+  methods: {
+    async getUserList() {
+      const { data: res } = await this.$http.get('users', { params: this.queryInfo })
+
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      //然后将获取到的数据保存到data中
+      this.userlist = res.data.users
+      this.total = res.data.total
+      console.log(this.userlist);
+      
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
