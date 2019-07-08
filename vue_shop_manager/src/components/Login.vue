@@ -6,30 +6,38 @@
         <img src="../assets/spiderMan.gif" alt />
       </div>
 
-        <!-- 输入表单 -->
-        <el-form label-width="0px" class="login_form" >
-          <el-form-item>
-            <el-input
-              type="text"
-              placeholder="username"
-              prefix-icon="iconfont icon-user"
-              v-model="loginForm.username"
-            ></el-input>
-            <el-input
-              type="password"
-              class="ipt"
-              placeholder="password"
-              prefix-icon="iconfont icon-3702mima"
-              v-model="loginForm.password"
-            ></el-input>
-          </el-form-item>
+      <!-- 输入表单 -->
+      <el-form
+        :model="loginForm"
+        :rules="loginFormRules"
+        ref="loginFormRef"
+        label-width="0px"
+        class="login_form"
+      >
+        <el-form-item prop="username">
+          <el-input
+            type="text"
+            placeholder="username"
+            prefix-icon="iconfont icon-user"
+            v-model="loginForm.username"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            type="password"
+            class="ipt"
+            placeholder="password"
+            prefix-icon="iconfont icon-3702mima"
+            v-model="loginForm.password"
+          ></el-input>
+        </el-form-item>
 
-          <!-- 登录按钮组 -->
-          <el-form-item class="btns">
-            <el-button type="primary">login</el-button>
-            <el-button @click="resetLoginForm">reset</el-button>
-          </el-form-item>
-        </el-form>
+        <!-- 登录按钮组 -->
+        <el-form-item class="btns">
+          <el-button @click="login" type="primary">login</el-button>
+          <el-button @click="resetLoginForm(loginFormRef)">reset</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -43,28 +51,21 @@ export default {
         username: 'admin',
         password: '123456'
       },
-      // 这是表单的验证规则对象
       loginFormRules: {
-        // 验证用户名是否合法
         username: [
-          { required: true, message: '请输入登录名称', trigger: 'blur' },
+          { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
-        // 验证密码是否合法
         password: [
-          { required: true, message: '请输入登录密码', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    // 点击重置按钮，重置登录表单
-    resetLoginForm() {
-      this.loginForm.username = ''
-      this.loginForm.password = ''
-      // console.log(this)
-      // this.$refs.loginFormRef.resetFields()
+    resetLoginForm(loginFormRef) {
+      this.$refs['loginFormRef'].resetFields()
     },
     login() {
       this.$refs.loginFormRef.validate(async valid => {
@@ -128,9 +129,9 @@ export default {
   box-sizing: border-box;
 }
 
-.ipt {
-  margin-top: 20px !important;
-}
+// .ipt {
+//   margin-top: 20px !important;
+// }
 
 .btns {
   display: flex;
