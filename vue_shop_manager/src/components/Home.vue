@@ -2,7 +2,7 @@
 <template>
   <div>
     <div>Welcome</div>
-    <button @click="loginOut">退出</button>
+    <el-button type="info" @click="loginOut">退出</el-button>
   </div>
 </template>
 
@@ -10,6 +10,8 @@
 export default {
   methods: {
     loginOut() {
+      // 清空token中的值
+      window.sessionStorage.clear()
       this.$router.push('/')
     }
   }
