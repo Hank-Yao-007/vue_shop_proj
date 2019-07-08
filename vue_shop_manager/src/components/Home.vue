@@ -12,6 +12,7 @@ export default {
     loginOut() {
       // 清空token中的值
       window.sessionStorage.clear()
+      // 编程式导航，强制跳转到首页，自动重定向到login页面
       this.$router.push('/')
     }
   }

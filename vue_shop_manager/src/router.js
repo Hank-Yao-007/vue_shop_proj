@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/Login.vue'
-import Home from './components/Home.vue';
+import Home from './components/Home.vue'
 
 Vue.use(Router)
 
+// 使用router接收Router实例，便于后面登录拦截
 const router = new Router({
   routes: [
     { path: '/', redirect: '/login' },
