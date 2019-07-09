@@ -9,21 +9,64 @@
     </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
-    <!-- <el-card>
-      <el-table :data="rightsList" border stripe>
-        <el-table-column type="index"></el-table-column>
-        <el-table-column label="权限名称" prop="authName"></el-table-column>
-        <el-table-column label="路径" prop="path"></el-table-column>
-        <el-table-column label="权限等级" prop="leve1">
+    <el-card>
+      <el-button type="primary">添加角色</el-button>
+      <el-table row-key="id" :data="rolesList" border stripe>
+        <el-table-column type="expand">
+          <!-- 点击展开，显示各级权限 -->
           <template slot-scope="scope">
-            <el-tag color="#53a8ff" type="info" v-if="scope.row.level==0">一级</el-tag>
-            <el-tag color="#8cc5ff" type="info" v-else-if="scope.row.level==1">二级</el-tag>
-            <el-tag color="#ecf5ff" type="info" v-else>三级</el-tag>
+            <!-- 一级权限 -->
+            <el-row
+              :class="[ index1==scope.row.children.length-1?'':'tag-bot-border', index1 == 0?'':'tag-top-border', 'tag-vertical-center']"
+              v-for="(item1, index1) in scope.row.children"
+              :key="item1.id"
+            >
+              <el-col :span="5">
+                <el-tag>{{item1.authName}}</el-tag>
+                <i class="el-icon-caret-right"></i>
+              </el-col>
+              <el-col :span="19">
+                <el-row
+                  v-for="(item2, i2) in item1.children"
+                  :key="item2.id"
+                  :class="[ i2==item1.children.length-1?'':'tag-bot-border', i2 == 0?'':'tag-top-border', 'tag-vertical-center']"
+                >
+                  <!-- 二级权限 -->
+                  <el-col :span="10">
+                    <el-tag type="success">{{item2.authName}}</el-tag>
+                    <i class="el-icon-caret-right"></i>
+                  </el-col>
+
+                  <!-- 三级权限 -->
+                  <el-col :span="24">
+                    <el-row
+                      v-for="(item3, i3) in item2.children"
+                      :key="item3.id"
+                      :class="[ i3==item2.children.length-1?'':'tag-bot-border', i3 == 0?'':'tag-top-border', 'tag-vertical-center']"
+                    >
+                      <el-col>
+                        <el-tag type="warning">{{item3.authName}}</el-tag>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
+
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="角色名称" prop="roleName"></el-table-column>
+        <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
+        <el-table-column labe1="操作">
+          <template>
+            <el-button icon="el-icon-edit" type="primary" size="mini">编辑</el-button>
+            <el-button icon="el-icon-delete" type="danger" size="mini">删除</el-button>
+            <el-button icon="el-icon-setting" type="warning" size="mini">分配权限</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </el-card> -->
-
+    </el-card>
   </div>
 </template>
 
@@ -32,7 +75,7 @@ export default {
   data() {
     return {
       // 保存权限列表的数据
-      rightsList: []
+      rolesList: []
     }
   },
   created() {
@@ -41,16 +84,29 @@ export default {
 
   methods: {
     async getRighsList() {
-      const { data: res } = await this.$http.get('rights/list')
+      // 请求角色列表的数据
+      const { data: res } = await this.$http.get('roles')
       if (res.meta.status !== 200) return this.$message.error('获取数据失败')
-      this.rightsList = res.data
+      this.rolesList = res.data
       this.$message.success('获取数据成功')
+      console.log(this.rolesList)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.tag-top-border {
+  padding-top: 8px;
+  // border-top: 1px solid #EBEEF5;
+}
+.tag-bot-border {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ebeef5;
+}
+// 标签垂直居中
+.tag-vertical-center {
+  display: flex;
+  align-items: center;
+}
 </style>
-
-

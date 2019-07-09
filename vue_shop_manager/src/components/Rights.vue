@@ -10,18 +10,20 @@
 
     <!-- 卡片视图区域 -->
     <el-card>
-<el-table :data="rightsList" border stripe>
-    <el-table-column type="index"></el-table-column>
-    <el-table-column label="权限名称" prop="authName"></el-table-column>
-    <el-table-column label="路径" prop="path"></el-table-column>
-    <el-table-column label="权限等级" prop="leve1">
-        <template slot-scope="scope">
+      <el-button type="primary">新增权限</el-button>
+      <el-table :data="rightsList" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="权限名称" prop="authName"></el-table-column>
+        <el-table-column label="路径" prop="path"></el-table-column>
+        <el-table-column label="权限等级" prop="leve1">
+          <template slot-scope="scope">
             <el-tag color="#E6A23C" type="info" v-if="scope.row.level==0">一级</el-tag>
             <el-tag color="#FAECD8" type="info" v-else-if="scope.row.level==1">二级</el-tag>
             <el-tag color="#FDF6EC" type="info" v-else>三级</el-tag>
-        </template>
-    </el-table-column>
-</el-table>    </el-card>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 

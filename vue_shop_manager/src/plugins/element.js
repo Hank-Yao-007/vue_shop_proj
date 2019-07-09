@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {
     Button, Form, FormItem, Input, Message, Progress, Header, Aside, Main, container,
     col, menu, row, Submenu, MenuItem, MenuItemGroup, Breadcrumb, BreadcrumbItem, Card,
-    Table, TableColumn, Switch, Pagination, Dialog, MessageBox,
+    Table, TableColumn, Switch, Pagination, Dialog, MessageBox, Tooltip,
     Tag
 } from 'element-ui'
 
@@ -33,6 +33,7 @@ Vue.use(Switch)
 Vue.use(Pagination)
 
 Vue.use(Dialog)
+Vue.use(Tooltip)
 
 Vue.use(Tag)
 
