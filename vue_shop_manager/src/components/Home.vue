@@ -17,7 +17,7 @@
           :collapse="isCollapse"
           :collapse-transition="false"
         >
-          <div class="collapse" @click="isCollapseF" v-text="toggleInner"></div>
+          <div class="toggle-button" @click="isCollapseF" v-text="toggleInner"></div>
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单模板区域 -->
