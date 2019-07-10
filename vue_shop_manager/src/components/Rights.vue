@@ -10,7 +10,34 @@
 
     <!-- 卡片视图区域 -->
     <el-card>
-      <el-button type="primary">新增权限</el-button>
+      <!-- 添加权限对话框 -->
+      <el-button type="primary" @click="addRightsFormVisible = true">新增权限</el-button>
+
+      <el-dialog title="新增权限" :visible.sync="addRightsFormVisible">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+          <el-form-item label="权限名称" :label-width="formLabelWidth" required prop="name">
+            <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
+          </el-form-item>
+
+          <el-form-item label="路径" :label-width="formLabelWidth" required prop="path">
+            <el-input v-model="ruleForm.path" autocomplete="off"></el-input>
+          </el-form-item>
+
+          <el-form-item label="权限等级" :label-width="formLabelWidth" required prop="level">
+            <el-select v-model="ruleForm.level" placeholder="请设置该权限的等级">
+              <el-option label="一级" value="1"></el-option>
+              <el-option label="二级" value="2"></el-option>
+              <el-option label="三级" value="3"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="resetRightsForm">取 消</el-button>
+          <el-button type="primary" @click="addRightsForm">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- 表格数据 -->
       <el-table :data="rightsList" border stripe>
         <el-table-column type="index"></el-table-column>
         <el-table-column label="权限名称" prop="authName"></el-table-column>
@@ -32,7 +59,21 @@ export default {
   data() {
     return {
       // 保存权限列表的数据
-      rightsList: []
+      rightsList: [],
+
+      // 添加权限数据
+      addRightsFormVisible: false,
+      formLabelWidth: '120px',
+      ruleForm: {
+        name: '',
+        path: '',
+        level: ''
+      },
+      rules: {
+        name: [{ required: true, message: '请输入权限名称', trigger: 'blur' }, { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }],
+        path: [{ required: true, message: '请输入路径名称', trigger: 'blur' }],
+        level: [{ required: true, message: '请设置权限等级', trigger: 'change' }]
+      }
     }
   },
   created() {
@@ -45,6 +86,20 @@ export default {
       if (res.meta.status !== 200) return this.$message.error('获取数据失败')
       this.rightsList = res.data
       this.$message.success('获取数据成功')
+    },
+
+    // 添加权限提交验证
+    addRightsForm() {
+      this.$refs.ruleForm.validate(valid => {
+        if (!valid) return this.$message.error('请填写完整')
+        this.addRightsFormVisible = false
+        
+        // 请求后台数据
+      })
+    },
+    resetRightsForm() {
+      this.addRightsFormVisible = false
+      this.$refs.ruleForm.resetFields()
     }
   }
 }
