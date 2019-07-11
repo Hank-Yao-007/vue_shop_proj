@@ -100,7 +100,8 @@ export default {
     resetRightsForm() {
       this.addRightsFormVisible = false
       this.$refs.ruleForm.resetFields()
-    }
+    },
+
   }
 }
 </script>
